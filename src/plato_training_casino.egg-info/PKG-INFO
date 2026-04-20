@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: plato-training-casino
+Version: 0.1.0
+Summary: Stochastic training data generator — fleet tables, curriculum ordering
+License: MIT
+Project-URL: Repository, https://github.com/SuperInstance/plato-training-casino
+Requires-Python: >=3.8

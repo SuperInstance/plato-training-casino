@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+src/plato_training_casino/__init__.py
+src/plato_training_casino/casino.py
+src/plato_training_casino.egg-info/PKG-INFO
+src/plato_training_casino.egg-info/SOURCES.txt
+src/plato_training_casino.egg-info/dependency_links.txt
+src/plato_training_casino.egg-info/top_level.txt
