@@ -226,14 +226,19 @@ impl TrainingCasino {
         // Thompson sampling with Beta distribution (simplified)
         let alpha = self.config.alpha;
         let beta = self.config.beta;
-        self.arms.values().max_by(|a, b| {
-            let sample_a = self.beta_sample(alpha + a.rewards, beta + a.pulls as f64 - a.rewards);
-            let sample_b = self.beta_sample(alpha + b.rewards, beta + b.pulls as f64 - b.rewards);
-            sample_a.partial_cmp(&sample_b).unwrap_or(std::cmp::Ordering::Equal)
-        }).map(|a| a.id.clone())
+        let arm_data: Vec<(String, f64, u64)> = self.arms.values()
+            .map(|a| (a.id.clone(), a.rewards, a.pulls))
+            .collect();
+        arm_data.into_iter()
+            .map(|(id, rewards, pulls)| {
+                let sample = self.beta_sample(alpha + rewards, beta + pulls as f64 - rewards);
+                (id, sample)
+            })
+            .max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal))
+            .map(|(id, _)| id)
     }
 
-    fn select_softmax(&self) -> Option<String> {
+    fn select_softmax(&mut self) -> Option<String> {
         let temp = self.config.temperature.max(0.01);
         let exp_values: Vec<f64> = self.arms.values()
             .map(|a| (a.mean_reward / temp).exp()).collect();
